@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GuardedBlocker | Proxy and game blocking for schools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7fa;--surface:#fff;--ink:#12263f;--muted:#5a6b80;--line:#dde3ea;--brand:#0d7a86;--brand-ink:#fff;--alert:#c9780a;--soft:#e6f1f3;
+--display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Figtree','Segoe UI',system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a2a;--surface:#15243a;--ink:#e8eef6;--muted:#9bacc0;--line:#26384f;--brand:#3cc0cc;--brand-ink:#08222a;--alert:#f0a640;--soft:#173344}}
+:root[data-theme="dark"]{--bg:#0e1a2a;--surface:#15243a;--ink:#e8eef6;--muted:#9bacc0;--line:#26384f;--brand:#3cc0cc;--brand-ink:#08222a;--alert:#f0a640;--soft:#173344}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+h1,h2,h3{font-family:var(--display);line-height:1.12;margin:0 0 .5em;letter-spacing:-.01em}
+h1{font-size:clamp(2.3rem,5.5vw,3.7rem);font-weight:700}
+h2{font-size:clamp(1.7rem,3.4vw,2.3rem);font-weight:700}
+h3{font-size:1.2rem;font-weight:500}
+p{margin:0 0 1em;max-width:62ch}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font:700 1.25rem var(--display);text-decoration:none}
+nav{display:flex;align-items:center;gap:6px}
+nav a{padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:500;color:var(--muted)}
+nav a:hover,nav a.on{color:var(--ink);background:var(--soft)}
+.btn{display:inline-block;border:0;cursor:pointer;font:600 1rem var(--body);padding:12px 22px;border-radius:8px;background:var(--brand);color:var(--brand-ink);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.08)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+nav a.btn{color:var(--brand-ink)}
+nav a.btn:hover{background:var(--brand)}
+.menu{display:none;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;font:600 .95rem var(--body)}
+.page{display:none}.page.on{display:block}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:72px 0 64px}
+.hero p.lead{font-size:1.2rem;color:var(--muted)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.model{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.model svg,.card svg{width:100%;height:auto;display:block}
+svg text{font:600 12px var(--body);fill:var(--ink)}svg .sub{font-weight:400;fill:var(--muted);font-size:11px}
+.nodebox{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+.flow{stroke:var(--line);stroke-width:2;fill:none;stroke-dasharray:4 5}
+.cap{margin:12px 2px 0;font-size:.92rem;color:var(--muted);min-height:1.6em}
+.card svg{margin-bottom:18px}
+.scan{animation:scan 3.2s ease-in-out infinite}@keyframes scan{0%,100%{transform:translateY(0)}55%{transform:translateY(52px)}}
+.blink{opacity:0;animation:blink 3.2s infinite}@keyframes blink{0%,55%{opacity:0}65%,92%{opacity:1}100%{opacity:0}}
+.bar{fill:var(--brand);transform-box:fill-box;transform-origin:bottom;animation:bar 2.4s ease-in-out infinite}.bar.hot{fill:var(--alert)}
+@keyframes bar{0%,100%{transform:scaleY(var(--a))}50%{transform:scaleY(var(--b))}}
+.ln{transform-box:fill-box;transform-origin:left;animation:ln 4s infinite both}
+@keyframes ln{0%{transform:scaleX(0)}30%,90%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.pop{opacity:0;animation:pop 4s infinite}@keyframes pop{0%,60%{opacity:0}70%,90%{opacity:1}100%{opacity:0}}
+.counters{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:64px 0}
+.cgrid{display:grid;grid-template-columns:1.7fr 1fr .8fr;gap:32px;margin-top:32px}
+.odo{display:flex;font:700 clamp(2rem,4.2vw,3.4rem)/1 var(--display);font-variant-numeric:tabular-nums;margin-bottom:10px}
+.dg{display:block;height:1em;overflow:hidden;width:.62em;text-align:center}
+.dg>span{display:block;transition:transform 2.2s cubic-bezier(.2,.8,.2,1)}
+.dg b{display:block;height:1em;font-weight:inherit}
+.cm{width:.3em;text-align:center}
+.quote{background:#0b1a2c;color:#f1f5fa;padding:110px 0;position:relative;overflow:hidden}
+.qm{position:absolute;left:3%;top:-60px;font:700 clamp(12rem,30vw,26rem)/1 var(--display);color:#5fd4de;opacity:.22;user-select:none}
+.qm.c{left:auto;right:3%;top:auto;bottom:-190px}
+.big{position:relative;font:700 clamp(2.6rem,9vw,7.5rem)/1.1 var(--display);letter-spacing:-.03em;margin:0;max-width:none}
+.rot{display:inline-block;height:1.1em;overflow:hidden;vertical-align:top;color:#5fd4de;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.rl{display:block;transition:transform .85s cubic-bezier(.7,0,.2,1)}
+.ri{display:block;height:1.1em;white-space:nowrap}.ri>span{display:inline-block}
+.qcap{position:relative;margin-top:36px;color:#a9bbcf;font-size:1.1rem;max-width:52ch}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+section.blk{padding:72px 0}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px}
+.card p{color:var(--muted);margin:0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+pre{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto;font:.85rem/1.7 ui-monospace,Consolas,monospace;color:var(--ink)}
+.band{background:var(--ink);color:var(--bg);text-align:center;padding:64px 24px}
+.band p{margin:0 auto 24px;color:inherit;opacity:.8}
+.formwrap{max-width:520px;margin:0 auto;padding:64px 24px}
+.formwrap.wide{max-width:640px}
+label{display:block;font-weight:600;margin:18px 0 6px;font-size:.95rem}
+input,select,textarea{width:100%;font:inherit;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.msg{margin-top:18px;padding:14px 16px;border-radius:8px;display:none}
+.msg.err{background:#fbe4e1;color:#8a1f12;display:block}
+.msg.ok{background:var(--soft);color:var(--ink);display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .msg.err{background:#3b1c18;color:#ffb4a8}}
+.small{font-size:.9rem;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:.92rem}
+.foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.foot nav a{padding:4px 10px}
+@media (max-width:860px){.hero,.split{grid-template-columns:1fr;gap:32px}.cols{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}
+.menu{display:block}nav{display:none;position:absolute;left:0;right:0;top:68px;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;padding:12px 24px}nav.open{display:flex}.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+<a class="logo" href="#/" aria-label="GuardedBlocker home"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M14 2 24 6v7c0 6.2-4.1 10.6-10 13C8.1 23.600 4 19.200 4 13V6z" fill="var(--brand)"/><path d="M9.500 14.200l3 3 6-6.400" fill="none" stroke="var(--brand-ink)" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round"/></svg>GuardedBlocker</a>
+<button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
+<nav id="nav" aria-label="Main">
+<a href="#/" data-r="">Home</a><a href="#/features" data-r="features">Features</a><a href="#/quote" data-r="quote">Get a quote</a><a href="#/login" data-r="login">Log in</a><a class="btn" href="#/quote">Get a quote</a>
+</nav></div></header>
+
+<main>
+<div class="page" id="p-">
+<div class="wrap hero">
+<div>
+<h1>The world's best proxy blocker, built for schools.</h1>
+<p class="lead">GuardedBlocker keeps students focused by blocking games, proxies, VPNs and unblocker sites on every school device and network. AI Scanning catches new ones the day they appear.</p>
+<div class="cta"><a class="btn" href="#/quote">Get a quote</a><a class="btn ghost" href="#/features">See how it works</a></div>
+</div>
+<div class="model">
+<svg viewBox="0 0 460 280" role="img" aria-label="A student request passes through GuardedBlocker, which allows learning sites and blocks games and proxies">
+<path class="flow" d="M130 150H180M280 150C305 150 305 65 330 65M280 150C305 150 305 215 330 215"/>
+<rect class="nodebox" x="10" y="115" width="120" height="70" rx="10"/><text x="70" y="146" text-anchor="middle">Student device</text><text class="sub" x="70" y="164" text-anchor="middle">Chromebook</text>
+<rect x="180" y="100" width="100" height="100" rx="16" fill="var(--brand)"/>
+<path d="M230 120l26 10v16c0 16-11 27-26 33-15-6-26-17-26-33v-16z" fill="none" stroke="var(--brand-ink)" stroke-width="3.5" stroke-linejoin="round"/>
+<text x="230" y="224" text-anchor="middle">GuardedBlocker</text>
+<rect class="nodebox" x="330" y="30" width="120" height="70" rx="10" style="stroke:var(--brand)"/><text x="390" y="61" text-anchor="middle">Learning sites</text><text class="sub" x="390" y="79" text-anchor="middle">Allowed</text>
+<rect class="nodebox" x="330" y="180" width="120" height="70" rx="10" style="stroke:var(--alert)"/><text x="390" y="211" text-anchor="middle">Games and proxies</text><text class="sub" x="390" y="229" text-anchor="middle">Blocked</text>
+<circle r="6" fill="var(--brand)" opacity="0"><animateMotion dur="3.2s" repeatCount="indefinite" path="M130 150L280 150C305 150 305 65 330 65"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.06;.92;1" dur="3.2s" repeatCount="indefinite"/></circle>
+<circle r="6" fill="var(--alert)" opacity="0"><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M130 150L280 150C305 150 305 215 330 215"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.06;.92;1" dur="3.2s" begin="1.6s" repeatCount="indefinite"/></circle>
+</svg>
+<p class="cap" id="cap"></p>
+</div>
+</div>
+
+<section class="counters" id="counters"><div class="wrap">
+<h2>Protecting classrooms right now</h2>
+<div class="cgrid">
+<div><div class="odo" data-v="4286913507" role="img" aria-label="More than 4.2 billion"></div><span class="small">Game, proxy and VPN pages blocked</span></div>
+<div><div class="odo" data-v="12846305" role="img" aria-label="More than 12.8 million"></div><span class="small">Students protected</span></div>
+<div><div class="odo" data-v="41972" role="img" aria-label="More than 41,000"></div><span class="small">Schools and districts</span></div>
+</div></div></section>
+
+<section class="blk"><div class="wrap">
+<h2>See how it works</h2>
+<div class="cols">
+<div class="card"><svg viewBox="0 0 240 140" aria-hidden="true"><rect class="nodebox" x="10" y="8" width="220" height="124" rx="8"/><rect x="10" y="8" width="220" height="22" rx="8" fill="var(--soft)"/><text class="sub" x="22" y="23">free-arcade-games.example</text><rect x="24" y="44" width="90" height="10" rx="3" fill="var(--line)"/><rect x="24" y="62" width="150" height="10" rx="3" fill="var(--line)"/><rect x="24" y="80" width="120" height="10" rx="3" fill="var(--line)"/><g class="scan"><rect x="14" y="36" width="212" height="3" fill="var(--brand)"/></g><g class="blink"><rect x="114" y="100" width="106" height="22" rx="11" fill="var(--alert)"/><text x="167" y="115" text-anchor="middle" style="fill:#2a1800">Game detected</text></g></svg><h3>AI Scanning</h3><p>Every page is scored by content and behavior, so brand-new game and proxy sites are stopped before they reach a block list.</p></div>
+<div class="card"><svg viewBox="0 0 240 140" aria-hidden="true"><text class="sub" x="14" y="18">Blocked this period, by room</text><line x1="10" y1="122" x2="230" y2="122" stroke="var(--line)" stroke-width="2"/><g id="bars"></g></svg><h3>Next-Gen Monitoring</h3><p>A live view of every campus: what is being blocked, in which rooms and on which devices.</p></div>
+<div class="card"><svg viewBox="0 0 240 140" aria-hidden="true"><rect class="nodebox" x="50" y="8" width="140" height="124" rx="8"/><rect class="ln" x="64" y="24" width="60" height="8" rx="3" fill="var(--brand)"/><rect class="ln" style="animation-delay:.15s" x="64" y="44" width="112" height="7" rx="3" fill="var(--line)"/><rect class="ln" style="animation-delay:.3s" x="64" y="60" width="96" height="7" rx="3" fill="var(--line)"/><rect class="ln" style="animation-delay:.45s" x="64" y="76" width="104" height="7" rx="3" fill="var(--line)"/><rect class="ln" style="animation-delay:.6s" x="64" y="92" width="70" height="7" rx="3" fill="var(--line)"/><g class="pop"><circle cx="168" cy="110" r="11" fill="var(--brand)"/><path d="M162 110l4 4 8-9" stroke="var(--brand-ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/></g></svg><h3>Verbose reports</h3><p>Every block comes with the full reasoning, ready for principals, IT directors and district boards.</p></div>
+</div></div></section>
+
+<section class="quote"><span class="qm" aria-hidden="true">&ldquo;</span><span class="qm c" aria-hidden="true">&rdquo;</span>
+<div class="wrap" style="position:relative">
+<p class="big"><span class="vh">No games. Ever.</span><span aria-hidden="true">No <span class="rot"><span class="rl" id="rl"><span class="ri"><span>games</span></span><span class="ri"><span>proxies</span></span><span class="ri"><span>VPNs</span></span><span class="ri"><span>malware</span></span><span class="ri"><span>hacks</span></span><span class="ri"><span>cheats</span></span><span class="ri"><span>unblockers</span></span><span class="ri"><span>distractions</span></span></span></span>. Ever.</span></p>
+<p class="qcap">The GuardedBlocker promise to every school we protect. If it doesn't belong in the classroom, it doesn't get through.</p>
+</div></section>
+<div class="band"><h2>See GuardedBlocker on your school network</h2><p>Tell us about your school or district and we'll put together a quote.</p><a class="btn" href="#/quote" style="background:var(--bg);color:var(--ink)">Get a quote</a></div>
+</div>
+
+<div class="page" id="p-features">
+<section class="blk"><div class="wrap">
+<h1>Everything a school needs to keep students on task</h1>
+<p class="lead" style="color:var(--muted);font-size:1.15rem">Game blocking, proxy detection, monitoring and reporting in one platform that works across every Chromebook, laptop and campus network.</p>
+<div class="cols">
+<div class="card"><h3>Game blocking</h3><p>Browser games, game portals and cloud-gaming sites are blocked on every device, in class and out of it.</p></div>
+<div class="card"><h3>Proxy and VPN detection</h3><p>Web proxies, VPN extensions and unblocker sites are caught even when they change address overnight.</p></div>
+<div class="card"><h3>AI Scanning</h3><p>Pages are scored by content and behavior, so new game and proxy sites are blocked before they appear on any list.</p></div>
+<div class="card"><h3>Next-Gen Monitoring</h3><p>Live dashboards by campus, room and device, with alerts when something unusual starts spreading.</p></div>
+<div class="card"><h3>Verbose reports</h3><p>Every block comes with the evidence behind it, exportable as PDF or CSV for principals and district boards.</p></div>
+<div class="card"><h3>Class-period policies</h3><p>Games off during lessons, relaxed at lunch. Set rules by grade, room or bell schedule.</p></div>
+</div></div></section>
+<section class="blk" style="padding-top:0"><div class="wrap split">
+<div><h2>Reports that show their work</h2><p style="color:var(--muted)">Most blockers tell you a page was stopped. GuardedBlocker tells you why, so your team can trust it, tune it and prove it.</p><a class="btn" href="#/quote">Get a quote</a></div>
+<pre>Report GB-2291   Blocked
+Device      Chromebook, Grade 8, Room 114
+Time        10:42 AM, Period 3
+Category    Game unblocker
+Confidence  98.4%
+
+Signals matched
+  - Known games portal mirror
+  - Proxy script in page source
+  - Domain registered 2 days ago
+  - 41 requests in 6 seconds
+
+Rule fired  Class hours / No games</pre>
+</div></section>
+</div>
+
+<div class="page" id="p-quote">
+<div class="formwrap wide">
+<h1>Get a quote</h1>
+<p class="small">Tell us a little about your setup. A specialist will reply within one business day.</p>
+<form id="qf" novalidate>
+<div class="two"><div><label for="qn">Full name</label><input id="qn" required autocomplete="name"></div><div><label for="qe">Work email</label><input id="qe" type="email" required autocomplete="email"></div></div>
+<div class="two"><div><label for="qc">School or district</label><input id="qc" autocomplete="organization"></div>
+<div><label for="qs">Number of students</label><select id="qs"><option>Under 1,000</option><option>1,000 to 5,000</option><option>5,000 to 25,000</option><option>Over 25,000</option></select></div></div>
+<label for="qm">What do you need to keep off your network?</label><textarea id="qm"></textarea>
+<div style="margin-top:22px"><button class="btn" type="submit">Request quote</button></div>
+<div class="msg" id="qmsg" role="status"></div>
+</form></div>
+</div>
+
+<div class="page" id="p-login">
+<div class="formwrap">
+<h1>Log in</h1>
+<p class="small">Sign in to your school dashboard and reports.</p>
+<form id="lf" novalidate>
+<label for="le">Email</label><input id="le" type="email" autocomplete="username">
+<label for="lp">Password</label><input id="lp" type="password" autocomplete="current-password">
+<div style="margin-top:22px"><button class="btn" type="submit" style="width:100%">Log in</button></div>
+<div class="msg" id="lmsg" role="alert"></div>
+<p class="small" style="margin-top:20px">No account? <a href="#/quote">Get a quote</a> to start.</p>
+</form></div>
+</div>
+</main>
+
+<footer><div class="wrap foot"><div>&copy; 2026 GuardedBlocker, Inc. All rights reserved.</div><nav aria-label="Footer"><a href="#/features">Features</a><a href="#/quote">Get a quote</a><a href="#/login">Log in</a></nav></div></footer>
+
+<script>
+(function(){
+var pages=document.querySelectorAll('.page'),links=document.querySelectorAll('nav a[data-r]'),nav=document.getElementById('nav'),menu=document.getElementById('menu');
+function route(){
+ var r=(location.hash.replace(/^#\/?/,'')||'');if(!document.getElementById('p-'+r))r='';
+ pages.forEach(function(p){p.classList.toggle('on',p.id==='p-'+r)});
+ links.forEach(function(a){a.classList.toggle('on',a.dataset.r===r)});
+ nav.classList.remove('open');menu.setAttribute('aria-expanded','false');window.scrollTo(0,0);
+ var t={'':'Proxy and game blocking for schools',features:'Features',quote:'Get a quote',login:'Log in'}[r];
+ document.title='GuardedBlocker | '+t;
+}
+window.addEventListener('hashchange',route);route();
+menu.addEventListener('click',function(){var o=nav.classList.toggle('open');menu.setAttribute('aria-expanded',o)});
+
+// hero flow caption
+var cap=document.getElementById('cap'),msgs=['Allowed: math-practice.example, learning','Blocked: free-arcade-games.example, game site','Allowed: library-research.example, learning','Blocked: fast-proxy.example, proxy','Allowed: docs-assignment.example, learning','Blocked: vpn-unlock.example, VPN'],mi=0;
+function nextMsg(){cap.textContent=msgs[mi++%msgs.length]}nextMsg();setInterval(nextMsg,1600);
+
+// monitoring bars
+var g=document.getElementById('bars'),NS='http://www.w3.org/2000/svg';
+for(var i=0;i<8;i++){var r=document.createElementNS(NS,'rect');r.setAttribute('x',22+i*26);r.setAttribute('y',30);r.setAttribute('width',16);r.setAttribute('height',92);r.setAttribute('rx',3);r.setAttribute('class','bar'+(i>5?' hot':''));r.style.setProperty('--a',(.2+Math.random()*.3).toFixed(2));r.style.setProperty('--b',(.55+Math.random()*.4).toFixed(2));r.style.animationDelay=(-i*.4)+'s';g.appendChild(r)}
+
+// odometers
+function build(el){var s=Number(el.dataset.v).toLocaleString('en-US');el._n=0;for(var i=0;i<s.length;i++){var d=document.createElement('span');if(s[i]===','){d.className='cm';d.textContent=','}else{el._n++;d.className='dg';var st=document.createElement('span');for(var k=0;k<10;k++){var b=document.createElement('b');b.textContent=k;st.appendChild(b)}d.appendChild(st)}el.appendChild(d)}}
+function setv(el,v){var ds=String(v).padStart(el._n,'0'),st=el.querySelectorAll('.dg>span');for(var i=0;i<st.length;i++){st[i].style.transitionDelay=((st.length-1-i)*70)+'ms';st[i].style.transform='translateY(-'+ds[i]+'em)'}}
+var odos=[].slice.call(document.querySelectorAll('.odo'));odos.forEach(build);
+function start(){odos.forEach(function(o){setv(o,o.dataset.v)});var live=odos[0],v=Number(live.dataset.v);setInterval(function(){v+=Math.floor(Math.random()*780)+120;setv(live,v)},2600)}
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();start()}},{threshold:.3});io.observe(document.getElementById('counters'))}else start();
+
+// rotating word
+var rot=document.querySelector('.rot'),rl=document.getElementById('rl'),ri=0;
+if(rot){var items=rl.children;rl.appendChild(items[0].cloneNode(true));
+var rw=function(){var w=items[ri].firstChild.getBoundingClientRect().width;if(w)rot.style.width=w+'px'};
+var rstep=function(){ri++;rl.style.transform='translateY(-'+(ri*1.1)+'em)';rw();if(ri===items.length-1){setTimeout(function(){rl.style.transition='none';ri=0;rl.style.transform='translateY(0)';rw();void rl.offsetHeight;rl.style.transition=''},900)}};
+rw();setInterval(rstep,2300);window.addEventListener('hashchange',function(){setTimeout(rw,60)});window.addEventListener('resize',rw);if(document.fonts)document.fonts.ready.then(rw)}
+
+// get a quote: validates, then discards. Nothing is sent anywhere.
+document.getElementById('qf').addEventListener('submit',function(e){
+ e.preventDefault();
+ var m=document.getElementById('qmsg'),n=document.getElementById('qn').value.trim(),em=document.getElementById('qe').value.trim();
+ if(!n||!/^\S+@\S+\.\S+$/.test(em)){m.className='msg err';m.textContent='Enter your name and a valid work email so we can reply.';return}
+ m.className='msg ok';m.textContent='Thanks, '+n.split(' ')[0]+'. Your request is in and a specialist will email you within one business day.';
+ this.reset();
+});
+
+// login: never succeeds
+document.getElementById('lf').addEventListener('submit',function(e){
+ e.preventDefault();
+ var m=document.getElementById('lmsg'),b=this.querySelector('button');
+ b.disabled=true;b.textContent='Checking...';
+ setTimeout(function(){b.disabled=false;b.textContent='Log in';m.className='msg err';m.textContent='Incorrect email or password. Check your details and try again.';document.getElementById('lp').value=''},900);
+});
+})();
+</script>
+</body>
+</html>
